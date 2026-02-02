@@ -49,9 +49,5 @@ I significantly improved the model's predictive accuracy by moving from Bagging 
 2. **Placement Strategy:** Prioritize **Bottom placements** for long-form content, as users finishing the content show higher intent.
 3. **Efficiency:** Use the GBT model to score users in real-time; focusing on the top decile of predicted users can potentially reduce ad waste by **~30%**.
 
----
 
-## 📂 Repository Structure
-* `01_EDA_and_Cleaning.ipynb`: Data profiling and null handling.
-* `02_Statistical_Testing.ipynb`: A/B test logic and Chi-square results.
-* `03_ML_Modeling_Pipeline.ipynb`: Feature engineering, RF vs. GBT training, and evaluation.
+
