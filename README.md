@@ -6,7 +6,6 @@ This project is an end-to-end machine learning system designed to analyze large-
 The objective was to identify the most effective ad positions and user demographics to maximize Click-Through Rate (CTR) and marketing ROI. The system bridges the gap between raw data analysis and real-time business decision-making.
 
 ## 🛠️ Tech Stack
-* **Engine:** PySpark (Spark SQL & MLlib)
 * **Big Data & ML**: PySpark (Spark MLlib), Scipy (Statistical Analysis)
 * **Infrastructure:** Databricks / Spark Cluster
 * **MLOps: MLflow** (Tracking, Model Registry)
