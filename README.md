@@ -39,19 +39,42 @@ To gain granular insights, I performed a Chi-square Test of Independence segment
 
 ### 3. Model Selection & Hyperparameter Tuning
 
-I conducted iterative experiments across different algorithms and fine-tuned the best-performing model using **MLflow** to balance predictive power and inference efficiency.
+I conducted iterative experiments to balance predictive power and inference efficiency. Instead of simply feeding raw data into models, I developed specific feature strategies based on behavioral hypotheses.
+#### 🛠️ Strategic Feature Engineering
+
+To capture non-linear user patterns, I implemented two key strategies:
+
+**1. Age Bucketization (Numerical to Categorical)**
+* Hypothesis: Ad-clicking behavior is not a linear function of age. Instead, users in similar life stages (e.g., 20s vs. 50s) share distinct behavioral clusters.
+
+* Implementation: Transformed raw age data into discrete buckets (10s, 20s, 30s, etc.) using Spark's Bucketizer.
+
+* Impact: This simplified the feature space and allowed the model to focus on demographic trends rather than individual age noise, leading to an AUC of 0.7136 in early GBT iterations.
+
+**2. Feature Interaction (Contextual Intent)**
+* Hypothesis: A user’s intent is contextual. "Shopping" in the Afternoon differs from "Shopping" at Night.
+
+* Experimental Findings:
+    * Index-only Interaction (AUC 0.7142): By avoiding One-Hot Encoding, the model maintained a "dense" feature set. This provided high interpretability and solid performance by identifying specific high-impact segments without over-segmenting the data.
+    * OHE + Interaction (AUC 0.6971): While this offered the most granular detail (65+ features), it led to Data Sparsity. The GBT algorithm struggled to generalize from rare feature combinations, resulting in a performance dip.
+ 
+**3. Final Selection: GBT Full Feature (AUC 0.7523)**
+* Conclusion: While manual interaction provided great insights into user behavior, the Full Feature model performed best. This suggests that the Gradient Boosting algorithm is inherently capable of capturing complex, multi-dimensional patterns from raw categorical features more effectively than manual, high-dimensional interaction terms.
+  
 
 #### Phase 1: Algorithm Comparison
-
-I measured the performance gap between a streamlined feature set (Age Bucketization) and a **Full Feature** approach to determine the optimal input vector.
 
 | Algorithm | Feature Strategy | AUC | Result & Trade-off |
 | :--- | :--- | :--- | :--- |
 | **Logistic Regression** | Top 100 Category Truncation | 0.5559 | **Lightweight**: Fast, but low predictive power. |
 | **Random Forest** | Standard Bagging | 0.6043 | **Baseline**: Robust but average performance. |
-| **GBT (Age Optimized)** | **Age Bucketization** | 0.7136 | **Efficient**: Good balance, but missed some interactions. |
+| **GBT (Age Optimized,OHE)** | **Age Bucketization** | 0.7136 | **Efficient**: Good balance, but missed some interactions. |
+| **GBT (Interaction)** | **Index-only History $\times$ Time Interaction** | 0.7142 | High Interpretability: Captured contextual intent with low dimensions, preventing sparsity.|
+| **GBT (Interaction,OHE)** |  **History $\times$ Time** | 0.6971 |Experimental: Insightful but limited by data sparsity.|
 | **GBT (Full Feature)** | **All Available Features** | **0.7523** | **Selected**: Best capture of multi-dimensional patterns. |
 
+  
+      
 #### Phase 2: Hyperparameter Tuning (MLflow Tracking)
 Using the GBT model, I performed a grid search on `max_depth` and `step_size` while also measuring the impact of different feature sets.
 
