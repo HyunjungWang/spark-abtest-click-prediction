@@ -2,7 +2,7 @@ name: Ad Click Prediction CI
 
 on:
   push:
-    branches: [ main ]  # main 브랜치에 코드가 push될 때 실행
+    branches: [ main ] 
   pull_request:
     branches: [ main ]
 
@@ -31,11 +31,9 @@ jobs:
        
       - name: Run Pytest
         env:
-          # 테스트 코드에서 모델을 불러올 때 필요한 정보들
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          # 아까 만든 test.py(또는 tests 폴더)를 실행
           pytest
 
    
