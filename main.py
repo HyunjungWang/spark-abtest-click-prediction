@@ -7,7 +7,11 @@ import mlflow
 spark = SparkSession.builder.getOrCreate()
 
 mlflow.set_tracking_uri("databricks")
+if "DATABRICKS_HOST" in os.environ:
+    os.environ['DATABRICKS_HOST'] = os.getenv("DATABRICKS_HOST")
+    os.environ['DATABRICKS_TOKEN'] = os.getenv("DATABRICKS_TOKEN")
 
+    
 app = FastAPI(title="Ad Click Prediction Service")
 
 UC_VOLUME_PATH = "/Volumes/workspace/default/model_tmp"
