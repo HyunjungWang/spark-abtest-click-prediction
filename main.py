@@ -6,6 +6,7 @@ import mlflow
 
 spark = SparkSession.builder.getOrCreate()
 
+mlflow.set_tracking_uri("databricks")
 
 app = FastAPI(title="Ad Click Prediction Service")
 
