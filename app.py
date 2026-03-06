@@ -76,3 +76,6 @@ if st.button("Run Prediction"):
                 st.info(f"⚡ **Moderate Interest.** Probability: {yes_probability * 100:.1f}%")
             else:
                 st.warning(f"❄️ **Low Engagement.** Probability: {yes_probability * 100:.1f}%")
+
+    except Exception as e:  
+        st.error(f"Error: {e}")
