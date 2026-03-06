@@ -32,7 +32,10 @@ with st.sidebar:
 if st.button("Run Prediction"):
     # API Endpoint (Databricks Serving or Local FastAPI)
     # Update this URL with your actual deployment endpoint
-    
+    headers = {
+        "Authorization": f"Bearer {DATABRICKS_TOKEN}",
+        "Content-Type": "application/json"
+    }
     data = {
         "gender": gender,
         "age": age,
