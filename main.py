@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from pyspark.sql import Row
 from pyspark.sql import SparkSession
 import mlflow
+import os
 
 spark = SparkSession.builder.getOrCreate()
 
