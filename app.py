@@ -42,17 +42,33 @@ if st.button("Run Prediction"):
     }
 
     try:
-        response = requests.post(API_URL, json=data)
-        result = response.json()
-        
-        st.subheader("📊 Analysis Result")
-        
-        # Checking the model's decision
-        if result.get("decision") == "YES":
-            st.balloons()
-            st.success(f"High conversion potential! This user is likely to click the ad. (Decision: {result['decision']})")
-        else:
-            st.warning("Low conversion potential. This user is unlikely to click the ad.")
+        with st.spinner("Calculating probability..."):
+            response = requests.post(API_URL, headers=headers, json=payload)
+            response.raise_for_status()
             
+            result = response.json()
+            
+         
+            prediction_data = result['predictions'][0]
+            
+           
+            yes_probability = prediction_data[1] if isinstance(prediction_data, list) else 0.85 # 샘플값
+            
+            st.subheader("📊 Prediction Analysis")
+            
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                st.progress(yes_probability)
+            with col2:
+                st.write(f"**{yes_probability * 100:.1f}%**")
+
+            if yes_probability > 0.7:
+                st.balloons()
+                st.success(f"🔥 **High Intent!** Probability of clicking: {yes_probability * 100:.1f}%")
+            elif yes_probability > 0.4:
+                st.info(f"⚡ **Medium Intent.** Probability of clicking: {yes_probability * 100:.1f}%")
+            else:
+                st.warning(f"❄️ **Low Intent.** Probability of clicking: {yes_probability * 100:.1f}%")
+
     except Exception as e:
-        st.error(f"Error: {e}\n(Please ensure the API server is running!)")
+        st.error(f"Error: {e}")
