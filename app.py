@@ -36,12 +36,16 @@ if st.button("Run Prediction"):
         "Authorization": f"Bearer {DATABRICKS_TOKEN}",
         "Content-Type": "application/json"
     }
-    data = {
-        "gender": gender,
-        "age": age,
-        "device_type": device,
-        "browsing_history": "Shopping", # Sample Data
-        "time_of_day": "Afternoon"
+    payload = {
+        "dataframe_records": [
+            {
+                "gender": gender,
+                "age": age,
+                "device_type": device,
+                "browsing_history": browsing_history, 
+                "time_of_day": time_of_day          
+            }
+        ]
     }
 
     try:
@@ -51,27 +55,24 @@ if st.button("Run Prediction"):
             
             result = response.json()
             
-         
-            prediction_data = result['predictions'][0]
+            decision = result.get('decision', 'UNKNOWN')
+            position = result.get('assigned_position', 'None')
+            yes_probability = result.get('click_probability', 0.0) 
             
-           
-            yes_probability = prediction_data[1] if isinstance(prediction_data, list) else 0.85 # 샘플값
-            
-            st.subheader("📊 Prediction Analysis")
+            st.subheader("📊 Real-time Prediction Analysis")
             
             col1, col2 = st.columns([3, 1])
             with col1:
                 st.progress(yes_probability)
             with col2:
-                st.write(f"**{yes_probability * 100:.1f}%**")
+                st.write(f"**{yes_probability * 100:.2f}%**")
+
+            st.write(f"**Decision:** `{decision}` | **Position:** `{position}`")
 
             if yes_probability > 0.7:
                 st.balloons()
-                st.success(f"🔥 **High Intent!** Probability of clicking: {yes_probability * 100:.1f}%")
+                st.success(f"🔥 **High Potential!** The model predicts a {yes_probability * 100:.1f}% chance of a click.")
             elif yes_probability > 0.4:
-                st.info(f"⚡ **Medium Intent.** Probability of clicking: {yes_probability * 100:.1f}%")
+                st.info(f"⚡ **Moderate Interest.** Probability: {yes_probability * 100:.1f}%")
             else:
-                st.warning(f"❄️ **Low Intent.** Probability of clicking: {yes_probability * 100:.1f}%")
-
-    except Exception as e:
-        st.error(f"Error: {e}")
+                st.warning(f"❄️ **Low Engagement.** Probability: {yes_probability * 100:.1f}%")
