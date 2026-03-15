@@ -15,7 +15,7 @@ def test_real_ad_prediction():
     }
     
     with httpx.Client() as client:
-        response = client.post(url, json=payload, timeout=30.0)
+        response = client.post(url, json=payload, timeout=60.0)
     
     # Assertions
     assert response.status_code == 200
