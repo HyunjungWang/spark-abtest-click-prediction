@@ -89,16 +89,12 @@ if st.button("Run Prediction"):
             if decision == "SHOW_AD":
                 st.balloons()
                 st.success(f"✅ **Decision: {decision}**")
-                
                 col1, col2 = st.columns(2)
-                col1.metric("Best Position", position)
-                col2.metric("Click Probability", f"{prob * 100:.2f}%")
-                
-                st.progress(prob)
-                st.info(f"Target this user at the **{position}** of the page for maximum engagement.")
+                col1.metric("Best Position", assigned_position)
+                col2.metric("Click Probability", f"{click_probability * 100:.2f}%")
             else:
                 st.warning(f"⚠️ **Decision: {decision}**")
-                st.write(f"Reason: {result.get('reason', 'Low probability')}")
+                st.write(f"Reason: {reason}")
 
     except Exception as e:
         st.error(f"Failed to connect to the prediction server: {e}")
