@@ -73,6 +73,9 @@ def get_ad_decision(data: UserData):
     try:
         response = requests.post(DATABRICKS_SERVING_URL, headers=headers, json=payload,timeout=60)
         response.raise_for_status() # Raise exception for 4xx/5xx errors
+        if response.status_code != 200:
+            st.error(f"🚨 Databricks Error Detail: {response.text}")
+            print(f"Detail: {response.text}")
         
         # 4. Parsing the probability results
 
