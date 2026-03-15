@@ -67,7 +67,7 @@ if st.button("Run Prediction"):
                 max_prob = max(probs)
                 best_idx = probs.index(max_prob)
                 pos_map = {0: "Top", 1: "Side", 2: "Bottom"}
-                THRESHOLD = 0.5 
+                THRESHOLD = 0.4 
                 
                 if max_prob >= THRESHOLD:
                     decision = "SHOW_AD"
