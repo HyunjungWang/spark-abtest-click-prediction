@@ -5,14 +5,23 @@ from pyspark.sql import SparkSession
 import mlflow
 import os
 import requests
-import streamlit as st
-#DATABRICKS_SERVING_URL = os.getenv("DATABRICKS_SERVING_URL", "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations")
+DATABRICKS_SERVING_URL = os.getenv("DATABRICKS_SERVING_URL", "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations")
 #DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN")
-DATABRICKS_TOKEN= st.secrets["DATABRICKS_TOKEN"].strip()
-DATABRICKS_SERVING_URL = st.secrets["DATABRICKS_SERVING_URL"].strip()
+#DATABRICKS_TOKEN= st.secrets["DATABRICKS_TOKEN"].strip()
+#DATABRICKS_SERVING_URL = st.secrets["DATABRICKS_SERVING_URL"].strip()
+
 app = FastAPI(title="Ad Click Prediction Service")
 THRESHOLD = 0.4 
+def get_token():
+    try:
+        import streamlit as st
+        if "DATABRICKS_TOKEN" in st.secrets:
+            return st.secrets["DATABRICKS_TOKEN"].strip()
+    except Exception:
+        pass
 
+    token = os.getenv("DATABRICKS_TOKEN")
+    return token.strip() if token else None
 class UserData(BaseModel):
     """
     Schema for incoming user data.
@@ -31,6 +40,7 @@ def get_ad_decision(data: UserData):
     Endpoint that simulates 3 ad positions (Top, Side, Bottom)
     and returns the position with the highest predicted click probability.
     """
+    DATABRICKS_TOKEN=get_token()
     if not DATABRICKS_TOKEN:
         return {"error": "DATABRICKS_TOKEN is not set in environment variables."}
     
