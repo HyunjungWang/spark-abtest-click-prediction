@@ -6,8 +6,10 @@ import mlflow
 import os
 import requests
 
-DATABRICKS_SERVING_URL = os.getenv("DATABRICKS_SERVING_URL", "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations")
-DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN")
+#DATABRICKS_SERVING_URL = os.getenv("DATABRICKS_SERVING_URL", "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations")
+#DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN")
+DATABRICKS_TOKEN= st.secrets["DATABRICKS_TOKEN"].strip()
+DATABRICKS_SERVING_URL = st.secrets["DATABRICKS_SERVING_URL"].strip()
 app = FastAPI(title="Ad Click Prediction Service")
 THRESHOLD = 0.4 
 

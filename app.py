@@ -15,8 +15,6 @@ try:
     
     os.environ["DATABRICKS_TOKEN"] = dbx_token
     os.environ["DATABRICKS_SERVING_URL"] = dbx_url
-
-    st.write(f"🔍 Debug: Token loaded (Starts with: {dbx_token[:5]}...)")
     
     st.success("✅ Credentials loaded successfully!")
 except KeyError as e:
