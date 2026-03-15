@@ -23,7 +23,7 @@ class UserData(BaseModel):
     device_type_idx: float
     browsing_history_idx: float
     time_of_day_idx: float
-    age: int
+    age: float
 
 @app.post("/smart-ads")
 def get_ad_decision(data: UserData):
@@ -36,28 +36,29 @@ def get_ad_decision(data: UserData):
     
     # 2. Simulate 3 potential ad positions (Top=0.0, Side=1.0, Bottom=2.0)
     positions = [0.0, 1.0, 2.0] 
-    candidates = []
-    
-    for pos in positions:
-        # Construct feature row in the EXACT order used during model training
-        row = [
-            data.gender_idx,
-            data.device_type_idx,
-            pos, # ad_position_idx
-            data.browsing_history_idx,
-            data.time_of_day_idx,
-            data.age
-        ]
-        candidates.append(row)
+    payload = {
+        "dataframe_split": {
+            "columns": [
+                "gender_idx", 
+                "device_type_idx", 
+                "ad_position_idx", 
+                "browsing_history_idx", 
+                "time_of_day_idx", 
+                "age"
+            ],
+            "data": [
+                [float(data.gender_idx), float(data.device_type_idx), 0.0, float(data.browsing_history_idx), float(data.time_of_day_idx), float(data.age)],
+                [float(data.gender_idx), float(data.device_type_idx), 1.0, float(data.browsing_history_idx), float(data.time_of_day_idx), float(data.age)],
+                [float(data.gender_idx), float(data.device_type_idx), 2.0, float(data.browsing_history_idx), float(data.time_of_day_idx), float(data.age)]
+            ]
+        }
+    }
 
     # 3. Requesting Databricks Model Serving
     headers = {
         "Authorization": f"Bearer {DATABRICKS_TOKEN}",
         "Content-Type": "application/json"
     }
-    
-    # "dataframe_records" is the standard format for Scikit-Learn models in MLflow serving
-    payload = {"dataframe_records": candidates}
 
     try:
         response = requests.post(DATABRICKS_SERVING_URL, headers=headers, json=payload)
