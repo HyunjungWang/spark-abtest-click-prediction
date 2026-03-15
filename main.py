@@ -5,11 +5,8 @@ from pyspark.sql import SparkSession
 import mlflow
 import os
 
-DATABRICKS_SERVING_URL="https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations"
-if "DATABRICKS_HOST" in os.environ:
-    os.environ['DATABRICKS_HOST'] = os.getenv("DATABRICKS_HOST")
-    os.environ['DATABRICKS_TOKEN'] = os.getenv("DATABRICKS_TOKEN")
-
+DATABRICKS_SERVING_URL = os.getenv("DATABRICKS_SERVING_URL", "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations")
+DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN")
     
 app = FastAPI(title="Ad Click Prediction Service")
 # Business Logic: Minimum probability to justify showing an ad
@@ -33,6 +30,8 @@ def get_ad_decision(data: UserData):
     Endpoint that simulates 3 ad positions (Top, Side, Bottom)
     and returns the position with the highest predicted click probability.
     """
+    if not DATABRICKS_TOKEN:
+        return {"error": "DATABRICKS_TOKEN is not set in environment variables."}
     
     # 2. Simulate 3 potential ad positions (Top=0.0, Side=1.0, Bottom=2.0)
     positions = [0.0, 1.0, 2.0] 
