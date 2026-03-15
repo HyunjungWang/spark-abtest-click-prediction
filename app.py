@@ -16,16 +16,16 @@ device_map = {"Mobile": 0.0, "Desktop": 1.0, "Tablet": 2.0}
 history_map = {"Shopping": 0.0, "News": 1.0, "Entertainment": 2.0, "Education": 3.0, "Social Media": 4.0, "Unknown": 5.0}
 time_map = {"Morning": 0.0, "Afternoon": 1.0, "Evening": 2.0, "Night": 3.0}
 # 2. Input Form (Sidebar)with st.sidebar:
-    st.header("👤 User Profile")
-    gender = st.selectbox("Gender", list(gender_map.keys()))
-    age = st.number_input("Age", min_value=10, max_value=90, value=25)
-    device = st.selectbox("Device Type", list(device_map.keys()))
+st.header("👤 User Profile")
+gender = st.selectbox("Gender", list(gender_map.keys()))
+age = st.number_input("Age", min_value=10, max_value=90, value=25)
+device = st.selectbox("Device Type", list(device_map.keys()))
     
-    st.header("🌐 Online Behavior")
-    browsing_history = st.selectbox("Browsing History", list(history_map.keys()))
+st.header("🌐 Online Behavior")
+browsing_history = st.selectbox("Browsing History", list(history_map.keys()))
     
-    st.header("⏰ Context")
-    time_of_day = st.selectbox("Time of Day", list(time_map.keys()))
+st.header("⏰ Context")
+time_of_day = st.selectbox("Time of Day", list(time_map.keys()))
 
 # 2. Prediction Button
 if st.button("Run Prediction"):
