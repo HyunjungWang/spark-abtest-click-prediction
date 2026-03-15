@@ -8,9 +8,7 @@ import requests
 
 DATABRICKS_SERVING_URL = os.getenv("DATABRICKS_SERVING_URL", "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations")
 DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN")
-    
 app = FastAPI(title="Ad Click Prediction Service")
-# Business Logic: Minimum probability to justify showing an ad
 THRESHOLD = 0.4 
 
 class UserData(BaseModel):

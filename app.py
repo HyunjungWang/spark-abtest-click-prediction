@@ -10,17 +10,16 @@ st.title("🎯 Smart Ad Click Predictor")
 st.write("Enter user data to predict the real-time probability of an ad click.")
 API_URL = "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations" 
 try:
-    dbx_token = st.secrets["DATABRICKS_TOKEN"]
-    dbx_url = st.secrets["DATABRICKS_SERVING_URL"]
+    dbx_token = st.secrets["DATABRICKS_TOKEN"].strip()
+    dbx_url = st.secrets["DATABRICKS_SERVING_URL"].strip()
     
-    # 2. FastAPI(main.py)나 다른 모듈이 읽을 수 있게 환경 변수로 복사
     os.environ["DATABRICKS_TOKEN"] = dbx_token
     os.environ["DATABRICKS_SERVING_URL"] = dbx_url
     
     st.success("✅ Credentials loaded successfully!")
 except KeyError as e:
     st.error(f"❌ Secret missing: {e}. Check your secrets.toml file.")
-    st.stop() # 설정이 없으면 앱 진행 중단
+    st.stop() 
 # 1. Input Form Setup
 gender_map = {"Male": 0.0, "Female": 1.0}
 device_map = {"Mobile": 0.0, "Desktop": 1.0, "Tablet": 2.0}
@@ -52,7 +51,7 @@ if st.button("Run Prediction"):
     try:
         with st.spinner("Analyzing optimal ad placement..."):
             # Send request to our FastAPI (main.py)
-            response = requests.post(API_URL, json=payload)
+            response = requests.post(dbx_url, json=payload)
             response.raise_for_status()
             
             result = response.json()
