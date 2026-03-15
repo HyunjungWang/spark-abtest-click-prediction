@@ -4,6 +4,7 @@ from pyspark.sql import Row
 from pyspark.sql import SparkSession
 import mlflow
 import os
+import requests
 
 DATABRICKS_SERVING_URL = os.getenv("DATABRICKS_SERVING_URL", "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations")
 DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN")
