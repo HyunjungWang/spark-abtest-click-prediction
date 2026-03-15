@@ -5,7 +5,7 @@ from pyspark.sql import SparkSession
 import mlflow
 import os
 import requests
-import st
+import streamlit as st
 #DATABRICKS_SERVING_URL = os.getenv("DATABRICKS_SERVING_URL", "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations")
 #DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN")
 DATABRICKS_TOKEN= st.secrets["DATABRICKS_TOKEN"].strip()
