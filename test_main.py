@@ -1,17 +1,28 @@
-import unittest
-from unittest.mock import MagicMock
+import httpx
+import pytest
 
-class TestAdPrediction(unittest.TestCase):
-    def test_model_logic_mock(self):
-        mock_model = MagicMock()
-        
-        mock_model.predict.return_value = ["YES"]
-        
-        input_data = {"age": 25, "gender": "Male"}
-        prediction = mock_model.predict(input_data)
-        
-        self.assertEqual(prediction[0], "YES")
-        print("✅ Mock Test Passed: Server bypass successful!")
-
-if __name__ == '__main__':
-    unittest.main()
+def test_real_ad_prediction():
+    # Local FastAPI endpoint
+    url = "http://localhost:8000/smart-ads"
+    
+    # Real-world test data (Numerical indices)
+    payload = {
+        "gender_idx": 0.0,
+        "device_type_idx: 1.0,
+        "browsing_history_idx": 2.0,
+        "time_of_day_idx": 1.0,
+        "age": 28
+    }
+    
+    with httpx.Client() as client:
+        response = client.post(url, json=payload, timeout=10.0)
+    
+    # Assertions
+    assert response.status_code == 200
+    data = response.json()
+    assert "decision" in data
+    assert "click_probability" in data or "reason" in data
+    
+    # 확률값이 우리가 설정한 0.0 ~ 1.0 사이인지 검증
+    if "click_probability" in data:
+        assert 0 <= data["click_probability"] <= 1.0

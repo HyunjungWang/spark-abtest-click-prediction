@@ -4,3 +4,6 @@ pytest
 pyspark
 mlflow
 pydantic
+uvicorn
+streamlit
+requests
