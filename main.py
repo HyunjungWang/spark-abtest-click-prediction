@@ -66,7 +66,7 @@ def get_ad_decision(data: UserData):
         
         # 4. Parsing the probability results
 
-        probs = response.json().get("predictions", [])
+        predictions= response.json().get("predictions", [])
         if len(predictions) > 0 and isinstance(predictions[0], list):
             probs = predictions[0] 
         else:
