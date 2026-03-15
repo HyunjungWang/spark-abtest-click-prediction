@@ -8,7 +8,8 @@ st.set_page_config(page_title="Ad Click Predictor", page_icon="🎯")
 st.title("🎯 Smart Ad Click Predictor")
 st.write("Enter user data to predict the real-time probability of an ad click.")
 API_URL = "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations" 
-DATABRICKS_TOKEN = st.secrets["DATABRICKS_TOKEN"]
+dbx_token = st.secrets["DATABRICKS_TOKEN"]
+os.environ["DATABRICKS_TOKEN"] = dbx_token
 
 # 1. Input Form Setup
 gender_map = {"Male": 0.0, "Female": 1.0}
