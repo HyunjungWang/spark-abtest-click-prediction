@@ -8,7 +8,7 @@ def test_real_ad_prediction():
     # Real-world test data (Numerical indices)
     payload = {
         "gender_idx": 0.0,
-        "device_type_idx: 1.0,
+        "device_type_idx": 1.0,
         "browsing_history_idx": 2.0,
         "time_of_day_idx": 1.0,
         "age": 28
@@ -23,6 +23,5 @@ def test_real_ad_prediction():
     assert "decision" in data
     assert "click_probability" in data or "reason" in data
     
-    # 확률값이 우리가 설정한 0.0 ~ 1.0 사이인지 검증
     if "click_probability" in data:
         assert 0 <= data["click_probability"] <= 1.0
