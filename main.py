@@ -63,8 +63,12 @@ def get_ad_decision(data: UserData):
         response.raise_for_status() # Raise exception for 4xx/5xx errors
         
         # 4. Parsing the probability results
-        # Our custom Wrapper returns a list of probabilities (float)
+
         probs = response.json().get("predictions", [])
+        if len(predictions) > 0 and isinstance(predictions[0], list):
+            probs = predictions[0] 
+        else:
+            probs = predictions    
         
         if not probs:
             return {"error": "No predictions returned from the model."}
