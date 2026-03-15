@@ -12,14 +12,20 @@ API_URL = "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/i
 try:
     dbx_token = st.secrets["DATABRICKS_TOKEN"].strip()
     dbx_url = st.secrets["DATABRICKS_SERVING_URL"].strip()
+   
     
-    os.environ["DATABRICKS_TOKEN"] = dbx_token
-    os.environ["DATABRICKS_SERVING_URL"] = dbx_url
+   # os.environ["DATABRICKS_TOKEN"] = dbx_token
+   # os.environ["DATABRICKS_SERVING_URL"] = dbx_url
     
     st.success("✅ Credentials loaded successfully!")
 except KeyError as e:
     st.error(f"❌ Secret missing: {e}. Check your secrets.toml file.")
     st.stop() 
+    
+ headers = {
+    "Authorization": f"Bearer {dbx_token}",  # Bearer와 토큰 사이 공백 확인!
+    "Content-Type": "application/json"
+}
 # 1. Input Form Setup
 gender_map = {"Male": 0.0, "Female": 1.0}
 device_map = {"Mobile": 0.0, "Desktop": 1.0, "Tablet": 2.0}
@@ -51,7 +57,7 @@ if st.button("Run Prediction"):
     try:
         with st.spinner("Analyzing optimal ad placement..."):
             # Send request to our FastAPI (main.py)
-            response = requests.post(dbx_url, json=payload)
+            response = requests.post(dbx_url,headers=headers, json=payload)
             response.raise_for_status()
             
             result = response.json()
