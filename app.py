@@ -63,7 +63,7 @@ if st.button("Run Prediction"):
     try:
         with st.spinner("Analyzing optimal ad placement..."):
             # Send request to our FastAPI (main.py)
-            response = requests.post(dxl_rul,headers=headers, json=payload)
+            response = requests.post(dbx_url,headers=headers, json=payload)
             response.raise_for_status()
                         
             result = response.json()
