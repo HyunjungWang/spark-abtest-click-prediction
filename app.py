@@ -8,18 +8,12 @@ st.set_page_config(page_title="Ad Click Predictor", page_icon="🎯")
 
 st.title("🎯 Smart Ad Click Predictor")
 st.write("Enter user data to predict the real-time probability of an ad click.")
-#API_URL = "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations" 
-
 
 try:
     dbx_token = st.secrets["DATABRICKS_TOKEN"].strip()
     dbx_url = st.secrets["DATABRICKS_SERVING_URL"].strip()
-   
+ 
     
-   # os.environ["DATABRICKS_TOKEN"] = dbx_token
-   # os.environ["DATABRICKS_SERVING_URL"] = dbx_url
-    
-    st.success("✅ Credentials loaded successfully!")
 except KeyError as e:
     st.error(f"❌ Secret missing: {e}. Check your secrets.toml file.")
     st.stop() 
@@ -87,7 +81,6 @@ if st.button("Run Prediction"):
             st.subheader("📊 Recommendation Results")
             
             if decision == "SHOW_AD":
-                st.balloons()
                 st.success(f"✅ **Decision: {decision}**")
                 col1, col2 = st.columns(2)
                 col1.metric("Best Position", assigned_position)
