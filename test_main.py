@@ -3,7 +3,7 @@ import pytest
 
 def test_real_ad_prediction():
     # Local FastAPI endpoint
-    url = "http://localhost:8000/smart-ads"
+    url = "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations"
     
     # Real-world test data (Numerical indices)
     payload = {
