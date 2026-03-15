@@ -8,7 +8,7 @@ st.set_page_config(page_title="Ad Click Predictor", page_icon="🎯")
 
 st.title("🎯 Smart Ad Click Predictor")
 st.write("Enter user data to predict the real-time probability of an ad click.")
-API_URL = "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations" 
+#API_URL = "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations" 
 
 
 try:
@@ -63,17 +63,26 @@ if st.button("Run Prediction"):
     try:
         with st.spinner("Analyzing optimal ad placement..."):
             # Send request to our FastAPI (main.py)
-            response = requests.post(dbx_url,headers=headers, json=payload)
+            response = requests.post(dxl_rul,headers=headers, json=payload)
             response.raise_for_status()
-            if response.status_code != 200:
-                st.error(f"데이터브릭스 응답 에러: {response.status_code}")
-                st.json(response.json())  
-            
+                        
             result = response.json()
+            probs = result.get('predictions', [])
             
-            decision = result.get('decision', 'UNKNOWN')
-            position = result.get('assigned_position', 'None')
-            prob = result.get('click_probability', 0.0)
+            if probs:
+                max_prob = max(probs)
+                best_idx = probs.index(max_prob)
+                pos_map = {0: "Top", 1: "Side", 2: "Bottom"}
+                THRESHOLD = 0.5 
+                
+                if max_prob >= THRESHOLD:
+                    decision = "SHOW_AD"
+                    assigned_position = pos_map.get(best_idx)
+                    click_probability = max_prob
+                else:
+                    decision = "NO_AD"
+                    reason = f"Max probability {max_prob:.2f} is below threshold"
+     
             
             st.subheader("📊 Recommendation Results")
             
