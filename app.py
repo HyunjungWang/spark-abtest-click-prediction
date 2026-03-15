@@ -41,7 +41,7 @@ if st.button("Run Prediction"):
     try:
         with st.spinner("Analyzing optimal ad placement..."):
             # Send request to our FastAPI (main.py)
-            response = requests.post(FASTAPI_URL, json=payload)
+            response = requests.post(API_URL, json=payload)
             response.raise_for_status()
             
             result = response.json()
