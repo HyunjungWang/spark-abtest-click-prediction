@@ -21,8 +21,8 @@ try:
 except KeyError as e:
     st.error(f"❌ Secret missing: {e}. Check your secrets.toml file.")
     st.stop() 
-    
- headers = {
+
+headers = {
     "Authorization": f"Bearer {dbx_token}",  # Bearer와 토큰 사이 공백 확인!
     "Content-Type": "application/json"
 }
