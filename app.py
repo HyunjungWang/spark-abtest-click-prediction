@@ -9,6 +9,31 @@ st.set_page_config(page_title="Ad Click Predictor", page_icon="🎯")
 st.title("🎯 Smart Ad Click Predictor")
 st.write("Enter user data to predict the real-time probability of an ad click.")
 API_URL = "https://dbc-89b96fbc-5a71.cloud.databricks.com/serving-endpoints/sk/invocations" 
+st.title("🚀 Debug Mode")
+
+# 1. 일단 Secrets가 잘 로드됐는지 아주 무식하게 확인
+st.write(f"URL 존재 여부: {st.secrets.get('DATABRICKS_SERVING_URL') is not None}")
+st.write(f"Token 앞자리: {st.secrets.get('DATABRICKS_TOKEN')[:5] if st.secrets.get('DATABRICKS_TOKEN') else 'None'}")
+
+# 2. 강제로 에러를 내서 응답 확인하기
+if st.button("데이터브릭스 통신 테스트 시작"):
+    try:
+        # 가장 단순한 형태의 payload로 테스트
+        test_payload = {"dataframe_split": {"columns": ["gender_idx", "device_type_idx", "ad_position_idx", "browsing_history_idx", "time_of_day_idx", "age"], "data": [[0.0, 0.0, 0.0, 0.0, 0.0, 25.0]]}}
+        
+        res = requests.post(
+            st.secrets["DATABRICKS_SERVING_URL"],
+            headers={"Authorization": f"Bearer {st.secrets['DATABRICKS_TOKEN']}"},
+            json=test_payload
+        )
+        
+        st.write(f"상태 코드: {res.status_code}")
+        st.json(res.json()) # 여기에 400 에러의 진짜 이유가 찍혀야 합니다.
+        
+    except Exception as e:
+        st.exception(e) # 파이썬 레벨의 에러(접속 불가 등)를 화면에 띄움
+
+        
 try:
     dbx_token = st.secrets["DATABRICKS_TOKEN"].strip()
     dbx_url = st.secrets["DATABRICKS_SERVING_URL"].strip()
