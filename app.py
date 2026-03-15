@@ -59,6 +59,9 @@ if st.button("Run Prediction"):
             # Send request to our FastAPI (main.py)
             response = requests.post(dbx_url,headers=headers, json=payload)
             response.raise_for_status()
+            if response.status_code != 200:
+                st.error(f"데이터브릭스 응답 에러: {response.status_code}")
+                st.json(response.json())  # 상세 에러 메시지를 예쁘게 화면에 출력
             
             result = response.json()
             
